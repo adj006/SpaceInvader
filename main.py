@@ -38,7 +38,16 @@ class Ship:
         self.cool_down_counter = 0
 
     def draw(self, window):
-        pygame.draw.rect(window, (0, 255, 0), (self.x, self.y, 50, 50))
+        window.blit(self.ship_img, (self.x, self.y))
+
+
+class Player(Ship):
+    def __init__(self, x, y, health=100):
+        super().__init__(x, y, health)
+        self.ship_img = YELLOW_SPACESHIP
+        self.laser_img =YELLOW_LASER
+        self.mask = pygame.mask.from_surface(self.ship_img)
+        self.max_health = health
 
 
 def main():
@@ -50,7 +59,7 @@ def main():
 
     player_vel = 5
 
-    ship = Ship(300, 650)
+    player = Player(300, 650)
 
     clock = pygame.time.Clock()
 
@@ -64,7 +73,7 @@ def main():
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
 
-        ship.draw(WIN)
+        player.draw(WIN)
 
         pygame.display.update()
 
@@ -77,14 +86,14 @@ def main():
                 run = False
 
         keys = pygame.key.get_pressed()
-        if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and ship.x - player_vel > 0: # Left
-            ship.x -= player_vel
-        if (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and ship.x + player_vel + 50 < WIDTH: # Right
-            ship.x += player_vel
-        if (keys[pygame.K_w] or keys[pygame.K_UP]) and ship.y - player_vel > 0: # Up
-            ship.y -= player_vel
-        if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and ship.y + player_vel + 50 < HEIGHT: # Down
-            ship.y += player_vel
+        if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and player.x - player_vel > 0:  # Left
+            player.x -= player_vel
+        if (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and player.x + player_vel + 50 < WIDTH:  # Right
+            player.x += player_vel
+        if (keys[pygame.K_w] or keys[pygame.K_UP]) and player.y - player_vel > 0:  # Up
+            player.y -= player_vel
+        if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and player.y + player_vel + 50 < HEIGHT:  # Down
+            player.y += player_vel
 
 
 main()
