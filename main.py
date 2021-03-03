@@ -26,6 +26,9 @@ YELLOW_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"
 # Background
 BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIDTH, HEIGHT))
 
+# Colors
+WHITE = (255, 255, 255)
+
 
 class Ship:
     def __init__(self, x, y, health=100):
@@ -78,6 +81,7 @@ def main():
     level = 0
     lives = 5
     main_font = pygame.font.SysFont("comicsans", 50)
+    lost_font = pygame.font.SysFont("comicsans", 60)
 
     enemies = []
     wave_length = 5
@@ -89,12 +93,14 @@ def main():
 
     clock = pygame.time.Clock()
 
+    lost = False
+
     def redraw_window():
         WIN.blit(BG, (0, 0))
 
         # Draw text
-        lives_label = main_font.render(f"Lives: {lives}", True, (255, 255, 255))
-        level_label = main_font.render(f"Level: {level}", True, (255, 255, 255))
+        lives_label = main_font.render(f"Lives: {lives}", True, WHITE)
+        level_label = main_font.render(f"Level: {level}", True, WHITE)
 
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
@@ -104,11 +110,18 @@ def main():
 
         player.draw(WIN)
 
+        if lost:
+            lost_label = lost_font.render("You Lost!!", True, WHITE)
+            WIN.blit(lost_label, (WIDTH/2 - lost_label.get_width()/2, 350))
+
         pygame.display.update()
 
     while run:
         clock.tick(fps)
         redraw_window()
+
+        if lives <= 0 or player.health <= 0:
+            lost = True
 
         if len(enemies) == 0:
             level += 1
