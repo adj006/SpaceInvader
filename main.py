@@ -112,6 +112,12 @@ class Enemy(Ship):
     def move(self, vel):
         self.y += vel
 
+    def shoot(self):
+        if self.cool_down_counter == 0:
+            laser = Laser(self.x + int(self.get_width()/2 - self.laser_img.get_width()/2), self.y, self.laser_img)
+            self.lasers.append(laser)
+            self.cool_down_counter = 1
+
 
 class Laser:
     def __init__(self, x, y, img):
