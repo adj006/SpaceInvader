@@ -79,6 +79,8 @@ class Ship:
 
 
 class Player(Ship):
+    HEALTH_BAR_THICKNESS = 10
+
     def __init__(self, x, y, health=100):
         super().__init__(x, y, health)
         self.ship_img = YELLOW_SPACESHIP
@@ -103,21 +105,20 @@ class Player(Ship):
             window,
             RED,
             (self.x,
-             self.y + self.ship_img.get_height() + 10,
+             self.y + self.ship_img.get_height() + self.HEALTH_BAR_THICKNESS,
              self.ship_img.get_width(),
-             10))
+             self.HEALTH_BAR_THICKNESS))
         pygame.draw.rect(
             window,
             GREEN,
             (self.x,
-             self.y + self.ship_img.get_height() + 10,
+             self.y + self.ship_img.get_height() + self.HEALTH_BAR_THICKNESS,
              self.ship_img.get_width() * (self.health/self.max_health),
-             10))
+             self.HEALTH_BAR_THICKNESS))
 
     def draw(self, window):
         super().draw(window)
         self.health_bar(window)
-
 
 
 class Enemy(Ship):
@@ -178,7 +179,7 @@ def main():
 
     laser_vel = 5
 
-    player = Player(300, 650)
+    player = Player(300, 630)
 
     clock = pygame.time.Clock()
 
@@ -241,7 +242,8 @@ def main():
             player.x += player_vel
         if (keys[pygame.K_w] or keys[pygame.K_UP]) and player.y - player_vel > 0:  # Up
             player.y -= player_vel
-        if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and player.y + player_vel + player.get_height() < HEIGHT:  # Down
+        if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and \
+                player.y + player_vel + player.get_height() + 2 * player.HEALTH_BAR_THICKNESS < HEIGHT:  # Down
             player.y += player_vel
         if keys[pygame.K_SPACE]:
             player.shoot()
