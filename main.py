@@ -28,6 +28,8 @@ BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background
 
 # Colors
 WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
 
 
 class Ship:
@@ -95,6 +97,27 @@ class Player(Ship):
                     if laser.collision(obj):
                         objs.remove(obj)
                         self.lasers.remove(laser)
+
+    def health_bar(self, window):
+        pygame.draw.rect(
+            window,
+            RED,
+            (self.x,
+             self.y + self.ship_img.get_height() + 10,
+             self.ship_img.get_width(),
+             10))
+        pygame.draw.rect(
+            window,
+            GREEN,
+            (self.x,
+             self.y + self.ship_img.get_height() + 10,
+             self.ship_img.get_width() * (self.health/self.max_health),
+             10))
+
+    def draw(self, window):
+        super().draw(window)
+        self.health_bar(window)
+
 
 
 class Enemy(Ship):
